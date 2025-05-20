@@ -1,8 +1,11 @@
-torch
-torchvision
-pandas
-numpy
-Pillow
-tensorboard
-matplotlib
-opencv-python-headless
+# pip install -r requirements.txt
+torch==2.7.0
+torchvision==0.22.0
+pandas==2.2.3
+numpy==2.1.2
+Pillow==11.2.1
+tensorboard==2.19.0
+matplotlib==3.10.3
+opencv-python==4.11.0.86
+onnx==1.18.0
+onnxruntime==1.22.0

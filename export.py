@@ -4,7 +4,7 @@ from model import SimpleCNN
 
 def export_model_torchscript(
     weights_path="trained_models/sign_cnn_best.pth",
-    output_path="sign_model_scripted.pt",
+    output_path="trained_models/sign_model_scripted.pt",
 ):
     model = SimpleCNN()
     model.load_state_dict(torch.load(weights_path, map_location="cpu"))
@@ -17,7 +17,8 @@ def export_model_torchscript(
 
 
 def export_model_onnx(
-    weights_path="trained_models/sign_cnn_best.pth", output_path="sign_model.onnx"
+    weights_path="trained_models/sign_cnn_best.pth",
+    output_path="trained_models/sign_model.onnx",
 ):
     model = SimpleCNN()
     model.load_state_dict(torch.load(weights_path, map_location="cpu"))

@@ -19,6 +19,7 @@ venv/
 # PyTorch model files
 *.pth
 *.pt
+*.onnx
 
 # TensorBoard logs
 runs/

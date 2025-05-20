@@ -20,7 +20,7 @@ transform = transforms.Compose(
 )
 
 
-def load_model(path="sign_model_scripted.pt"):
+def load_model(path="trained_models/sign_model_scripted.pt"):
     model = torch.jit.load(path)
     model.eval()
     return model
@@ -36,20 +36,15 @@ def predict(model, frame):
 
 def main():
     model = load_model()
-
     cap = cv2.VideoCapture(0)
     print("Press 'q' to quit.")
-
     while True:
         ret, frame = cap.read()
         if not ret:
             break
-
         roi = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         roi = cv2.resize(roi, (28, 28))
-
         label = predict(model, roi)
-
         cv2.putText(
             frame,
             f"Prediction: {label}",
@@ -59,7 +54,6 @@ def main():
             (0, 255, 0),
             2,
         )
-
         cv2.imshow("Sign Language Prediction", frame)
         if cv2.waitKey(1) == ord("q"):
             break

@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+
+# Virtual environment
+env/
+venv/
+*.env/
+*.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# VSCode settings
+.vscode/
+
+# PyTorch model files
+*.pth
+*.pt
+
+# TensorBoard logs
+runs/
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Data files
+*.csv
+*.h5
+*.npz
+
+# Plots or generated images
+*.png
+*.jpg
+*.jpeg
+training_plot.png

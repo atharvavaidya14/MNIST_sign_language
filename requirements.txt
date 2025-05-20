@@ -1,0 +1,8 @@
+torch
+torchvision
+pandas
+numpy
+Pillow
+tensorboard
+matplotlib
+opencv-python-headless

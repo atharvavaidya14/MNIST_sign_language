@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 
 
@@ -20,7 +21,8 @@ class SimpleCNN(nn.Module):
             nn.Linear(64, 26),  # 26 output classes
         )
 
-    def forward(self, x):
+    def forward(self, x) -> torch.Tensor:
+        """Forward pass through the network."""
         x = self.conv(x)
         x = self.fc(x)
         return x

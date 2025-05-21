@@ -17,7 +17,7 @@ model.load_state_dict(
 )
 model.eval()
 
-# Define the same transforms you used during training
+# Define the same transforms used during training
 transform = transforms.Compose(
     [
         transforms.Grayscale(num_output_channels=1),
@@ -33,6 +33,8 @@ CLASS_NAMES = [chr(i) for i in range(65, 91)]  # A-Z
 
 @app.route("/predict", methods=["POST"])
 def predict():
+    """
+    Predict the label of an image."""
     if "image" not in request.files:
         return jsonify({"error": "No image file provided"}), 400
 

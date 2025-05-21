@@ -10,9 +10,6 @@ venv/
 *.env/
 *.venv/
 
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints
-
 # VSCode settings
 .vscode/
 
@@ -37,4 +34,3 @@ Thumbs.db
 *.png
 *.jpg
 *.jpeg
-training_plot.png

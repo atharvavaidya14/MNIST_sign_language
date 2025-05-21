@@ -4,6 +4,7 @@ from PIL import Image
 from torch.utils.data import Dataset, random_split
 import matplotlib.pyplot as plt
 import torch
+from typing import Tuple
 
 
 class SignLanguageDataset(Dataset):
@@ -24,14 +25,20 @@ class SignLanguageDataset(Dataset):
         return image, label
 
 
-def get_train_val_datasets(csv_path, transform=None, val_split=0.2):
+def get_train_val_datasets(
+    csv_path, transform=None, val_split=0.2
+) -> Tuple[Dataset, Dataset]:
+    """
+    Splits the dataset into training and validation sets."""
     full_dataset = SignLanguageDataset(csv_path, transform=transform)
     val_size = int(val_split * len(full_dataset))
     train_size = len(full_dataset) - val_size
     return random_split(full_dataset, [train_size, val_size])
 
 
-def evaluate(model, dataloader, criterion, device):
+def evaluate(model, dataloader, criterion, device) -> Tuple[float, float]:
+    """
+    Evaluate the model on the validation or test set."""
     model.eval()
     total_loss = 0
     correct = 0
@@ -51,6 +58,8 @@ def evaluate(model, dataloader, criterion, device):
 
 
 def plot_metrics(train_losses, val_losses, val_accuracies):
+    """
+    Plot training and validation metrics."""
     plt.figure(figsize=(12, 4))
 
     plt.subplot(1, 2, 1)

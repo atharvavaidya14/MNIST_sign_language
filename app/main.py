@@ -10,7 +10,9 @@ model, device = load_model()
 
 
 @app.post("/predict")
-async def predict(file: UploadFile = File(...)):
+async def predict(file: UploadFile = File(...)) -> JSONResponse:
+    """
+    Predict the label of an image."""
     image_bytes = await file.read()
     image = Image.open(io.BytesIO(image_bytes)).convert("L")
     label, confidence = predict_image(image, model, device)

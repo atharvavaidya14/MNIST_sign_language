@@ -1,11 +1,11 @@
 import cv2
 import torch
-import numpy as np
 from torchvision import transforms
-from model import SimpleCNN
+from torch.jit import ScriptModule
+from typing import Union
 
 # Label map (adjust for missing letters like 'J' and 'Z')
-label_map = [
+LABEL_MAP = [
     chr(i) for i in range(ord("A"), ord("Z") + 1) if i not in [ord("J"), ord("Z")]
 ]
 
@@ -20,18 +20,20 @@ transform = transforms.Compose(
 )
 
 
-def load_model(path="trained_models/sign_model_scripted.pt"):
+def load_model(path="trained_models/sign_model_scripted.pt") -> Union[ScriptModule, torch.nn.Module]:
+    """Load the pre-trained model."""
     model = torch.jit.load(path)
     model.eval()
     return model
 
 
-def predict(model, frame):
+def predict(model, frame) -> str:
+    """Predict the sign language letter from the frame."""
     input_tensor = transform(frame).unsqueeze(0)  # Add batch dimension
     with torch.no_grad():
         output = model(input_tensor)
         _, predicted = torch.max(output, 1)
-    return label_map[predicted.item()]
+    return LABEL_MAP[predicted.item()]
 
 
 def main():

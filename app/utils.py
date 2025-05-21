@@ -1,10 +1,8 @@
 import torch
 from torchvision import transforms
 from PIL import Image
+from typing import Tuple
 
-classes = [
-    chr(i) for i in range(65, 91) if i != ord("J") and i != ord("Z")
-]  # A-Z without J, Z
 
 transform = transforms.Compose(
     [
@@ -16,7 +14,9 @@ transform = transforms.Compose(
 )
 
 
-def predict_image(image: Image.Image, model, device: torch.device):
+def predict_image(image: Image.Image, model, device: torch.device) -> Tuple[int, float]:
+    """
+    Predict the label of an image using the trained model."""
     image = transform(image).unsqueeze(0).to(device)
     with torch.no_grad():
         output = model(image)

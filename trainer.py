@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter
 import wandb
+from typing import Tuple, List
 
 
 def train_model(
@@ -16,7 +17,9 @@ def train_model(
     checkpoint_path=None,
     writer=None,
     use_wandb=False,
-):
+) -> Tuple[List[float], List[float], List[float]]:
+    """
+    Train the model with early stopping and checkpointing."""
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
 

@@ -6,6 +6,8 @@ from tqdm import tqdm
 
 
 def csv_to_images(csv_path, output_dir, img_size=28):
+    """
+    Convert a CSV file containing image data to PNG images."""
     # Load CSV
     df = pd.read_csv(csv_path)
     os.makedirs(output_dir, exist_ok=True)
@@ -23,5 +25,5 @@ def csv_to_images(csv_path, output_dir, img_size=28):
 
 
 if __name__ == "__main__":
-    csv_to_images("sign_mnist_train.csv", "sign_mnist_train")
-    csv_to_images("sign_mnist_test.csv", "sign_mnist_test")
+    csv_to_images("sign_mnist_train_v1.csv", "sign_mnist_train")
+    csv_to_images("sign_mnist_test_v1.csv", "sign_mnist_test")

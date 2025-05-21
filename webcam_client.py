@@ -2,11 +2,13 @@ import cv2
 import httpx
 import asyncio
 import time
+from typing import Dict, Any
 
 url = "http://localhost:8000/predict"
 
 
-async def send_frame(frame):
+async def send_frame(frame) -> Dict[str, Any]:
+    """Send a frame to the server for prediction."""
     _, img_encoded = cv2.imencode(".jpg", frame)
     try:
         start = time.time()

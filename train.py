@@ -1,17 +1,41 @@
 import argparse
+import os
 import torch
 from torchvision import transforms
 from torch.utils.data import DataLoader
+from torch.utils.tensorboard import SummaryWriter
 
 from model import SimpleCNN
 from trainer import train_model
 from utils import get_train_val_datasets, SignLanguageDataset, evaluate, plot_metrics
 
+try:
+    import wandb
+    WANDB_AVAILABLE = True
+except ImportError:
+    WANDB_AVAILABLE = False
 
 def main(args):
-    # Device
+    # Dataset version logging
+    dataset_version = os.path.basename(args.train_csv).split("_")[-1].split(".")[0]
+    print(f"📦 Using dataset version: {dataset_version}")
     device = torch.device("cuda" if torch.cuda.is_available() and not args.cpu else "cpu")
-    print(f"Using device: {device}")
+    print(f"🚀 Using device: {device}")
+
+    # TensorBoard writer
+    writer = SummaryWriter(log_dir=args.log_dir)
+
+    # WandB setup
+    if args.use_wandb and WANDB_AVAILABLE:
+        wandb.init(
+            project="sign-language-cnn",
+            config={
+                "epochs": args.epochs,
+                "lr": args.lr,
+                "batch_size": args.batch_size,
+                "dataset": dataset_version,
+            }
+        )
 
     # Transforms
     transform = transforms.Compose([
@@ -41,6 +65,8 @@ def main(args):
         epochs=args.epochs,
         checkpoint_path=args.checkpoint_path,
         log_dir=args.log_dir,
+        writer=writer,
+        use_wandb=args.use_wandb,
     )
 
     # Plot metrics
@@ -49,7 +75,11 @@ def main(args):
     # Evaluate on test set
     criterion = torch.nn.CrossEntropyLoss()
     test_loss, test_acc = evaluate(model, test_loader, criterion, device)
-    print(f"Test Loss: {test_loss:.4f}, Test Accuracy: {test_acc:.2f}%")
+    print(f"🧪 Test Loss: {test_loss:.4f}, Test Accuracy: {test_acc:.2f}%")
+
+    if args.use_wandb and WANDB_AVAILABLE:
+        wandb.log({"test_loss": test_loss, "test_accuracy": test_acc})
+        wandb.finish()
 
 
 if __name__ == "__main__":
@@ -62,6 +92,7 @@ if __name__ == "__main__":
     parser.add_argument("--checkpoint_path", type=str, default="trained_models/sign_cnn_best.pth", help="Path to save best model")
     parser.add_argument("--log_dir", type=str, default="runs/sign_cnn", help="TensorBoard log directory")
     parser.add_argument("--cpu", action="store_true", help="Force training on CPU")
+    parser.add_argument("--use_wandb", action="store_true", help="Enable logging to Weights & Biases (wandb)")
 
     args = parser.parse_args()
     main(args)

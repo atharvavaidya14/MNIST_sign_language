@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter
+import wandb
 
 
 def train_model(
@@ -13,9 +14,9 @@ def train_model(
     epochs=10,
     patience=3,
     checkpoint_path=None,
-    log_dir="runs/exp1",
+    writer=None,
+    use_wandb=False,
 ):
-    writer = SummaryWriter(log_dir)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
@@ -65,6 +66,16 @@ def train_model(
         writer.add_scalar("Loss/Train", avg_train_loss, epoch)
         writer.add_scalar("Loss/Val", avg_val_loss, epoch)
         writer.add_scalar("Accuracy/Val", val_accuracy, epoch)
+
+        # WandB logging
+        if use_wandb:
+            wandb.log(
+                {
+                    "train_loss": avg_train_loss,
+                    "val_loss": avg_val_loss,
+                    "val_accuracy": val_accuracy,
+                }
+            )
 
         print(
             f"Epoch {epoch+1}/{epochs}, "

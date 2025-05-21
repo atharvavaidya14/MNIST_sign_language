@@ -30,7 +30,6 @@ runs/
 Thumbs.db
 
 # Data files
-*.csv
 *.h5
 *.npz
 

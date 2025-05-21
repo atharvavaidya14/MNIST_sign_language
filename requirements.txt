@@ -9,3 +9,4 @@ matplotlib==3.10.3
 opencv-python==4.11.0.86
 onnx==1.18.0
 onnxruntime==1.22.0
+Flask==3.1.1 

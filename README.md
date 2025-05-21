@@ -8,7 +8,8 @@ This project builds a lightweight Convolutional Neural Network (CNN) to classify
 
 - **PyTorch-based CNN**: Lightweight and fast for mobile inference.
 - **Validation Split & Early Stopping**: Built-in to avoid overfitting.
-- **TensorBoard Integration**: Track training visually.
+- **TensorBoard & W&B Integration**: Track training visually.
+- **Dataset Version Logging**: Track dataset version
 - **TorchScript & ONNX Export**: Ready for mobile and cross-platform deployment.
 - **Live Webcam Inference**: Predict ASL signs from webcam feed.
 
@@ -48,21 +49,18 @@ Download:
    - `git clone https://github.com/yourusername/MNIST_sign.git && cd MNIST_sign`
 
 2. **Create a Python environment**:
-   - `conda create -n signlang python=3.8 -y && conda activate signlang`
+   - `conda create -n signlang python=3.10 -y && conda activate signlang`
 
 3. **Install dependencies**:
-   - `pip install torch torchvision matplotlib pandas numpy pillow opencv-python tensorboard`
-
-4. **Place CSV files**:
-   - Add `sign_mnist_train.csv` and `sign_mnist_test.csv` to the project directory.
+   - `pip install -r requirements.txt`
 
 ---
 
 ## 🏋️ Training
 
-Run the training script:
+Run the training script. Example:
 ```bash
-python train.py
+python train.py --use_wandb --batch_size 128 --epochs 20
 ```
 - Performs training with validation split.
 - Saves best model (`trained_models/sign_cnn_best.pth`).
@@ -112,3 +110,46 @@ Integrate the exported model into an Android app using the appropriate runtime l
 
 ---
 
+## 🌐 API Inference (Flask & FastAPI)
+
+You can serve the trained model using either **Flask** or **FastAPI** for web/API-based inference.
+
+### 🧪 Flask Inference API
+
+Run the Flask app locally:
+
+```bash
+python flask_app.py
+```
+
+- Accepts image uploads via POST.
+- Returns predicted ASL character.
+- Endpoint: http://localhost:5000/predict
+
+Example request (using curl):
+
+```bash 
+curl -X POST -F image=@sample.png http://localhost:5000/predict
+```
+
+### ⚡ Flask Inference API
+
+```bash 
+uvicorn app.main:app --reload
+```
+
+## 🐳 Docker Support
+
+Run the entire app (model + API) in a Docker container.
+
+### 🏗️ Build the image
+
+```bash 
+docker build -t signlang-api .
+```
+
+### 🚀 Run the container
+
+```bash 
+docker run -p 8000:8000 signlang-api
+```

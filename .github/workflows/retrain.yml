@@ -1,0 +1,48 @@
+name: Retrain Model on Data Change
+
+on:
+  push:
+    paths:
+      - data/**.csv
+      - train.py
+      - model.py
+      - utils.py
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Set up DVC remote credentials
+        run: |
+          echo "${{ secrets.GDRIVE_CREDENTIALS_JSON }}" > gdrive-creds.json
+          dvc remote modify gdrive_remote gdrive_use_service_account true
+          dvc remote modify gdrive_remote gdrive_service_account_json_file_path gdrive-creds.json
+        shell: bash
+        # GDRIVE_CREDENTIALS_JSON is a GitHub Secret configured in the repo settings
+
+      - name: Pull data via DVC
+        run: dvc pull
+
+      - name: Retrain Model
+        run: dvc repro
+
+      - name: Push updated model to DVC remote
+        run: dvc push
+
+      - name: Upload Model Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: trained-model
+          path: trained_models/sign_cnn_best.pth

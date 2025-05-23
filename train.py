@@ -16,6 +16,7 @@ try:
 except ImportError:
     WANDB_AVAILABLE = False
 
+
 def main(args):
     # Dataset version logging
     dataset_version = os.path.basename(args.train_csv).split("_")[-1].split(".")[0]
@@ -65,7 +66,6 @@ def main(args):
         lr=args.lr,
         epochs=args.epochs,
         checkpoint_path=args.checkpoint_path,
-        log_dir=args.log_dir,
         writer=writer,
         use_wandb=args.use_wandb,
     )
@@ -86,7 +86,7 @@ def main(args):
     metrics = {
         "train_loss": train_losses[-1],
         "val_loss": val_losses[-1],
-        "val_accuracy": val_accuracies[-1]
+        "val_accuracy": val_accuracies[-1],
     }
     with open("metrics.json", "w") as f:
         json.dump(metrics, f)

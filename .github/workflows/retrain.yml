@@ -23,6 +23,15 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
+      
+      - name: Check if GDRIVE_CREDENTIALS_JSON is available
+        run: |
+          if [ -z "${{ secrets.GDRIVE_CREDENTIALS_JSON }}" ]; then
+            echo "❌ Secret is NOT available."
+            exit 1
+          else
+            echo "✅ Secret is available and non-empty."
+          fi
 
       - name: Set up DVC remote credentials
         run: |

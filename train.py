@@ -84,8 +84,8 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train a CNN on Sign Language MNIST")
-    parser.add_argument("--train_csv", type=str, default="sign_mnist_train.csv", help="Path to training CSV file")
-    parser.add_argument("--test_csv", type=str, default="sign_mnist_test.csv", help="Path to testing CSV file")
+    parser.add_argument("--train_csv", type=str, default="data/sign_mnist_train_v1.csv", help="Path to training CSV file")
+    parser.add_argument("--test_csv", type=str, default="data/sign_mnist_test_v1.csv", help="Path to testing CSV file")
     parser.add_argument("--batch_size", type=int, default=64, help="Batch size")
     parser.add_argument("--epochs", type=int, default=15, help="Number of training epochs")
     parser.add_argument("--lr", type=float, default=0.001, help="Learning rate")

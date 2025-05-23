@@ -1,0 +1,5 @@
+outs:
+- md5: b3fc96cb14b199c8efde4baddb1b03b8
+  size: 21777485
+  hash: md5
+  path: sign_mnist_test_v1.csv

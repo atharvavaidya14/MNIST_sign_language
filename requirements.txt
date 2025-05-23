@@ -15,3 +15,5 @@ uvicorn==0.34.2
 python-multipart==0.0.20
 httpx==0.28.1 
 wandb==0.19.11
+
+dvc==3.59.2

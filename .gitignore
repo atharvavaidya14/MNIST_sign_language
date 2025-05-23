@@ -34,3 +34,6 @@ Thumbs.db
 *.png
 *.jpg
 *.jpeg
+
+secrets/
+.dvc/config.local

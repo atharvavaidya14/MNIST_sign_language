@@ -17,3 +17,4 @@ httpx==0.28.1
 wandb==0.19.11
 
 dvc==3.59.2
+dvc-gdrive==3.0.1

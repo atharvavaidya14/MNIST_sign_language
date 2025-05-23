@@ -1,5 +1,6 @@
 import argparse
 import os
+import json
 import torch
 from torchvision import transforms
 from torch.utils.data import DataLoader
@@ -80,6 +81,15 @@ def main(args):
     if args.use_wandb and WANDB_AVAILABLE:
         wandb.log({"test_loss": test_loss, "test_accuracy": test_acc})
         wandb.finish()
+
+    # Tracking for dvc
+    metrics = {
+        "train_loss": train_losses[-1],
+        "val_loss": val_losses[-1],
+        "val_accuracy": val_accuracies[-1]
+    }
+    with open("metrics.json", "w") as f:
+        json.dump(metrics, f)
 
 
 if __name__ == "__main__":

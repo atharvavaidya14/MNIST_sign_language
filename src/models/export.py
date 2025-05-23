@@ -1,5 +1,5 @@
 import torch
-from model import SimpleCNN
+from src.models.model_architecture import SimpleCNN
 
 
 def export_model_torchscript(

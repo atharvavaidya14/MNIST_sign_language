@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   train_model:
-    cmd: python train.py
+    cmd: python src/training/train.py
     deps:
     - path: data/sign_mnist_test_v1.csv
       hash: md5
@@ -11,16 +11,16 @@ stages:
       hash: md5
       md5: e42b5fb8f2be6bb2b35b0f696b598e7c
       size: 83281065
-    - path: train.py
+    - path: src/training/train.py
       hash: md5
-      md5: cdcc8cd4f1fd42a31a2fb095769799f6
-      size: 4143
+      md5: 934efa9a72eb0313bcabeae11eba1b5e
+      size: 4024
     outs:
     - path: metrics.json
       hash: md5
-      md5: 3f32e3c8299ece52fb13691cbf585a29
-      size: 94
+      md5: 987a6992dcb9006f31e4f331cd4e867d
+      size: 105
     - path: trained_models/sign_cnn_best.pth
       hash: md5
-      md5: dda7a9396033aadedcf7cb1014acd866
+      md5: 0d3efec4f50b256d74178bbeb332e88a
       size: 234913

@@ -2,7 +2,7 @@ import torch
 from torchvision import transforms
 from PIL import Image
 import numpy as np
-from model import SimpleCNN
+from src.models.model_architecture import SimpleCNN
 import torch.nn.functional as F
 from typing import Tuple
 

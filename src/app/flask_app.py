@@ -4,7 +4,7 @@ import torch
 import torch.nn.functional as F
 from PIL import Image
 from torchvision import transforms
-from model import SimpleCNN
+from src.models.model_architecture import SimpleCNN
 
 app = Flask(__name__)
 

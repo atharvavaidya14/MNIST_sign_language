@@ -6,9 +6,9 @@ from torchvision import transforms
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
-from model import SimpleCNN
-from trainer import train_model
-from utils import get_train_val_datasets, SignLanguageDataset, evaluate, plot_metrics
+from src.models.model_architecture import SimpleCNN
+from src.training.trainer import train_model
+from src.utils.utils import get_train_val_datasets, SignLanguageDataset, evaluate, plot_metrics
 
 try:
     import wandb

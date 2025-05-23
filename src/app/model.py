@@ -16,7 +16,7 @@ def load_model(
 
 
 if __name__ == "__main__":
-    from utils import predict_image
+    from src.utils.utils import predict_image
 
     model, device = load_model()
     img = Image.open("test_image.jpg")

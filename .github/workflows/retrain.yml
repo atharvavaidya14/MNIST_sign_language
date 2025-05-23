@@ -7,51 +7,83 @@ on:
       - train.py
       - model.py
       - utils.py
+  workflow_dispatch:
 
 jobs:
   retrain:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.10
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
+          echo "::group::Installing Python requirements..."
           pip install -r requirements.txt
+          echo "::endgroup::"
       
       - name: Check if GDRIVE_CREDENTIALS_JSON is available
         run: |
           if [ -z "${{ secrets.GDRIVE_CREDENTIALS_JSON }}" ]; then
-            echo "❌ Secret is NOT available."
+            echo "::group::❌ Secret is NOT available."
             exit 1
           else
-            echo "✅ Secret is available and non-empty."
+            echo "::group::✅ Secret is available and non-empty."
           fi
+          echo "::endgroup::"
+      
+      - name: Write GDrive credentials
+        run: |
+          echo "$GDRIVE_CREDENTIALS_JSON" > gdrive-creds.json
+        env:
+          GDRIVE_CREDENTIALS_JSON: ${{ secrets.GDRIVE_CREDENTIALS_JSON }}
+
 
       - name: Set up DVC remote credentials
         run: |
-          echo "${{ secrets.GDRIVE_CREDENTIALS_JSON }}" > gdrive-creds.json
+          echo "::group::Setting up DVC remote credentials..."
           dvc remote modify gdrive_remote gdrive_use_service_account true
           dvc remote modify gdrive_remote gdrive_service_account_json_file_path gdrive-creds.json
+          echo "::endgroup::"
         shell: bash
         # GDRIVE_CREDENTIALS_JSON is a GitHub Secret configured in the repo settings
 
       - name: Pull data via DVC
-        run: dvc pull
+        run: |
+          echo "::group::Pulling data from DVC remote..."
+          dvc pull
+          echo "::endgroup::"
 
       - name: Retrain Model
-        run: dvc repro
+        run: |
+          echo "::group::Retraining..."
+          dvc repro
+          echo "::endgroup::"
 
       - name: Push updated model to DVC remote
-        run: dvc push
+        run: |
+          echo "::group::Pushing data to DVC..."
+          dvc push
+          echo "::endgroup::"
+      
+      - name: Cleanup credentials
+        run: rm gdrive-creds.json
+
+      - name: Start uploading model artifact
+        run: echo "::group::Uploading model artifact..."
 
       - name: Upload Model Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: trained-model
           path: trained_models/sign_cnn_best.pth
+
+      - name: Finish uploading model artifact
+        run: |
+          echo "Model artifact uploaded."
+          echo "::endgroup::"

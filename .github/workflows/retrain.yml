@@ -24,6 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           echo "::group::Installing Python requirements..."
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
           echo "::endgroup::"
       

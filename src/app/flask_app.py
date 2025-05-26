@@ -44,6 +44,11 @@ CLASS_NAMES = [chr(i) for i in range(65, 91)]  # A-Z
 
 
 # ----------------------------- Routes -----------------------------
+@app.route("/")
+def index():
+    return "Welcome to the Sign Language API"
+
+
 @app.route("/predict", methods=["POST"])
 def predict():
     if "image" not in request.files:

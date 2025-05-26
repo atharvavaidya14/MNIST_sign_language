@@ -14,9 +14,9 @@ venv/
 .vscode/
 
 # PyTorch model files
-*.pth
-*.pt
-*.onnx
+# *.pth
+# *.pt
+# *.onnx
 
 # TensorBoard logs
 runs/

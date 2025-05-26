@@ -1,6 +1,7 @@
 import torch
 from src.models.model_architecture import SimpleCNN
 
+
 def test_model_forward_pass():
     model = SimpleCNN()
     dummy_input = torch.randn(1, 1, 28, 28)

@@ -4,7 +4,6 @@ from torch.utils.data import DataLoader, TensorDataset
 import tempfile
 from src.training.trainer import train_model
 import os
-import tempfile
 
 
 # Dummy writer that does nothing
@@ -48,7 +47,7 @@ def test_train_model_executes():
 
         assert len(train_losses) > 0
         assert len(train_losses) == len(val_losses) == len(val_acc)
-        assert all(isinstance(l, float) for l in train_losses)
+        assert all(isinstance(loss, float) for loss in train_losses)
         assert os.path.exists(path)  # checkpoint file should exist
     finally:
         os.remove(path)

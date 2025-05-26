@@ -1,8 +1,6 @@
 import torch
 from torchvision import transforms
 from PIL import Image
-import numpy as np
-from src.models.model_architecture import SimpleCNN
 import torch.nn.functional as F
 from typing import Tuple
 from src.utils.utils import load_model, get_device
@@ -25,7 +23,7 @@ def predict(image_path: str) -> Tuple[int, float]:
     """
     model = load_model()
     device = get_device()
-    image = Image.open(image_path).convert("L") # Convert to grayscale
+    image = Image.open(image_path).convert("L")  # Convert to grayscale
     image = transform(image).unsqueeze(0).to(device)
     with torch.no_grad():
         outputs = model(image)

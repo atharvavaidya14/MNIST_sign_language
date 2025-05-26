@@ -8,10 +8,16 @@ from torch.utils.tensorboard import SummaryWriter
 
 from src.models.model_architecture import SimpleCNN
 from src.training.trainer import train_model
-from src.utils.utils import get_train_val_datasets, SignLanguageDataset, evaluate, plot_metrics
+from src.utils.utils import (
+    get_train_val_datasets,
+    SignLanguageDataset,
+    evaluate,
+    plot_metrics,
+)
 
 try:
     import wandb
+
     WANDB_AVAILABLE = True
 except ImportError:
     WANDB_AVAILABLE = False
@@ -21,7 +27,9 @@ def main(args):
     # Dataset version logging
     dataset_version = os.path.basename(args.train_csv).split("_")[-1].split(".")[0]
     print(f"📦 Using dataset version: {dataset_version}")
-    device = torch.device("cuda" if torch.cuda.is_available() and not args.cpu else "cpu")
+    device = torch.device(
+        "cuda" if torch.cuda.is_available() and not args.cpu else "cpu"
+    )
     print(f"🚀 Using device: {device}")
 
     # TensorBoard writer
@@ -36,14 +44,13 @@ def main(args):
                 "lr": args.lr,
                 "batch_size": args.batch_size,
                 "dataset": dataset_version,
-            }
+            },
         )
 
     # Transforms
-    transform = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.5,), (0.5,))
-    ])
+    transform = transforms.Compose(
+        [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
+    )
 
     # Datasets
     train_dataset, val_dataset = get_train_val_datasets(args.train_csv, transform)
@@ -94,16 +101,38 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train a CNN on Sign Language MNIST")
-    parser.add_argument("--train_csv", type=str, default="data/sign_mnist_train_v1.csv", help="Path to training CSV file")
-    parser.add_argument("--test_csv", type=str, default="data/sign_mnist_test_v1.csv", help="Path to testing CSV file")
+    parser.add_argument(
+        "--train_csv",
+        type=str,
+        default="data/sign_mnist_train_v1.csv",
+        help="Path to training CSV file",
+    )
+    parser.add_argument(
+        "--test_csv",
+        type=str,
+        default="data/sign_mnist_test_v1.csv",
+        help="Path to testing CSV file",
+    )
     parser.add_argument("--batch_size", type=int, default=64, help="Batch size")
-    parser.add_argument("--epochs", type=int, default=15, help="Number of training epochs")
+    parser.add_argument(
+        "--epochs", type=int, default=15, help="Number of training epochs"
+    )
     parser.add_argument("--lr", type=float, default=0.001, help="Learning rate")
-    parser.add_argument("--checkpoint_path", type=str, default="trained_models/sign_cnn_best.pth", help="Path to save best model")
-    parser.add_argument("--log_dir", type=str, default="runs/sign_cnn", help="TensorBoard log directory")
+    parser.add_argument(
+        "--checkpoint_path",
+        type=str,
+        default="trained_models/sign_cnn_best.pth",
+        help="Path to save best model",
+    )
+    parser.add_argument(
+        "--log_dir", type=str, default="runs/sign_cnn", help="TensorBoard log directory"
+    )
     parser.add_argument("--cpu", action="store_true", help="Force training on CPU")
-    parser.add_argument("--use_wandb", action="store_true", help="Enable logging to Weights & Biases (wandb)")
+    parser.add_argument(
+        "--use_wandb",
+        action="store_true",
+        help="Enable logging to Weights & Biases (wandb)",
+    )
 
     args = parser.parse_args()
     main(args)
-    # Dummy comment to trigger the workflow

@@ -1,4 +1,3 @@
-import torch
 from PIL import Image
 from src.app.app_utils import load_serialized_model, predict_image
 

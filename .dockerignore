@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.env
+*.env
+.flake8
+
+# Jupyter and notebooks
+.ipynb_checkpoints/
+notebooks/
+
+# Git and DVC
+.git/
+.github/
+.gitignore
+.dvc/
+.dvcignore
+.pre-commit-config.yaml
+
+# Tests & tooling
+.pytest_cache/
+tests/
+.coverage
+coverage.xml
+htmlcov/
+.mypy_cache/
+
+# Logs & outputs
+*.log
+runs/
+output/
+checkpoints/
+trained_models/
+wandb/
+secrets/
+
+# Images & data
+*.jpg
+*.jpeg
+*.png
+*.csv
+*.tsv
+data/
+

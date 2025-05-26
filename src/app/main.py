@@ -1,12 +1,12 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
-from app.model import load_model
+from app_utils import load_serialized_model
 from app_utils import predict_image
 from PIL import Image
 import io
 
 app = FastAPI()
-model, device = load_model()
+model, device = load_serialized_model()
 
 
 @app.post("/predict")

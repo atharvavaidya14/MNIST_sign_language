@@ -1,8 +1,6 @@
 import cv2
 import torch
 from torchvision import transforms
-from torch.jit import ScriptModule
-from typing import Union
 
 # Label map (adjust for missing letters like 'J' and 'Z')
 LABEL_MAP = [
@@ -20,7 +18,9 @@ transform = transforms.Compose(
 )
 
 
-def load_model(path="trained_models/sign_model_scripted.pt") -> Union[ScriptModule, torch.nn.Module]:
+def load_serialized_model(
+    path="trained_models/sign_model_scripted.pt",
+) -> torch.jit.ScriptModule:
     """Load the pre-trained model."""
     model = torch.jit.load(path)
     model.eval()
@@ -37,7 +37,7 @@ def predict(model, frame) -> str:
 
 
 def main():
-    model = load_model()
+    model = load_serialized_model()
     cap = cv2.VideoCapture(0)
     print("Press 'q' to quit.")
     while True:

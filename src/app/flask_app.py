@@ -5,10 +5,11 @@ import torch.nn.functional as F
 from PIL import Image
 from torchvision import transforms
 from src.models.model_architecture import SimpleCNN
+from src.utils.utils import get_device
 
 app = Flask(__name__)
 
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+DEVICE = get_device()
 
 # Load your trained model weights
 model = SimpleCNN().to(DEVICE)

@@ -4,11 +4,15 @@ import pandas as pd
 import numpy as np
 import torch
 from PIL import Image
+from unittest.mock import patch
+from src.models.model_architecture import SimpleCNN
 from src.utils.utils import (
     SignLanguageDataset,
     get_train_val_datasets,
     evaluate,
     plot_metrics,
+    get_device,
+    load_model,
 )
 
 
@@ -100,3 +104,34 @@ def test_plot_metrics(tmp_path):
     assert (tmp_path / "training_plot.png").exists()
 
     os.chdir(cwd)
+
+
+def test_get_device():
+    device = get_device()
+    assert isinstance(device, torch.device)
+    assert device.type in ["cpu", "cuda"]
+
+
+@pytest.fixture
+def dummy_model_file(tmp_path):
+    model = SimpleCNN()
+    dummy_path = tmp_path / "dummy_model.pth"
+    torch.save(model.state_dict(), dummy_path)
+    return dummy_path
+
+
+def test_load_model_eval_mode(dummy_model_file):
+    model = load_model(str(dummy_model_file))  # Default is eval_mode=True
+    assert isinstance(model, SimpleCNN)
+    assert not model.training
+
+
+def test_load_model_train_mode(dummy_model_file):
+    model = load_model(str(dummy_model_file), eval_mode=False)
+    assert isinstance(model, SimpleCNN)
+    assert model.training
+
+
+@patch("torch.cuda.is_available", return_value=True)
+def test_get_device_cuda(mock_cuda):
+    assert str(get_device()) == "cuda"

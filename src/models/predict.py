@@ -5,14 +5,7 @@ import numpy as np
 from src.models.model_architecture import SimpleCNN
 import torch.nn.functional as F
 from typing import Tuple
-
-# Load the trained model
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = SimpleCNN().to(device)
-model.load_state_dict(
-    torch.load("trained_models\sign_cnn_best.pth", map_location=device)
-)
-model.eval()
+from src.utils.utils import load_model, get_device
 
 # Define transform (same as training!)
 transform = transforms.Compose(
@@ -30,7 +23,9 @@ def predict(image_path: str) -> Tuple[int, float]:
     """
     Predict the label of an image and return (predicted_class, confidence %).
     """
-    image = Image.open(image_path).convert("L")
+    model = load_model()
+    device = get_device()
+    image = Image.open(image_path).convert("L") # Convert to grayscale
     image = transform(image).unsqueeze(0).to(device)
     with torch.no_grad():
         outputs = model(image)

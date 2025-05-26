@@ -5,6 +5,7 @@ from torch.utils.data import Dataset, random_split
 import matplotlib.pyplot as plt
 import torch
 from typing import Tuple
+from src.models.model_architecture import SimpleCNN
 
 
 class SignLanguageDataset(Dataset):
@@ -76,3 +77,20 @@ def plot_metrics(train_losses, val_losses, val_accuracies):
     plt.tight_layout()
     plt.savefig("training_plot.png")
     # plt.show()
+
+
+def get_device() -> torch.device:
+    """
+    Get the device to use for training (GPU if available, else CPU)."""
+    return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+def load_model(weights_path: str, eval_mode: bool = True) -> SimpleCNN:
+    """
+    Load the model weights from the specified path."""
+    device = get_device()
+    model = SimpleCNN().to(device)
+    model.load_state_dict(torch.load(weights_path, map_location=device))
+    if eval_mode:
+        model.eval()
+    return model

@@ -26,7 +26,7 @@ def predict_image(image: Image.Image, model, device: torch.device) -> Tuple[int,
 
 
 def load_serialized_model(
-    model_path="trained_models/sign_model_scripted.pt",
+    model_path="src/app/sign_model_scripted.pt",
 ) -> Tuple[torch.jit.ScriptModule, torch.device]:
     """
     Load the pre-trained model from the specified path."""

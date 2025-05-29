@@ -1,10 +1,10 @@
-# Sign Language Alphabet Classifier
+# Sign Language Alphabet Classifier (End-to-end)
 
-This project builds a lightweight Convolutional Neural Network (CNN) to classify American Sign Language (ASL) alphabet gestures from grayscale 28x28 images. It uses a custom MNIST-style dataset and is optimized for fast training and Android deployment.
+This project is an **end-to-end machine learning pipeline** for classifying American Sign Language (ASL) alphabets from grayscale 28x28 images. It includes building a lightweight CNN model, training it, exporting models, deploying an API, and automating CI/CD using Docker, GitHub Actions, and Render.
 
 ---
 
-## 🚀 Features
+## 🔧 Features
 
 - **PyTorch-based CNN**: Lightweight and fast for mobile inference.
 - **Validation Split & Early Stopping**: Built-in to avoid overfitting.
@@ -12,20 +12,22 @@ This project builds a lightweight Convolutional Neural Network (CNN) to classify
 - **Dataset Version Logging**: Track dataset version
 - **TorchScript & ONNX Export**: Ready for mobile and cross-platform deployment.
 - **Live Webcam Inference**: Predict ASL signs from webcam feed.
+- **Flask & FastAPI APIs** for web-based inference.
+- **Dockerized Deployment** and **CI/CD with GitHub Actions**.
+- **Render-based Cloud Deployment** using Docker image.
+- **Integrated Testing and Formatting Pipelines** with Black, Flake8, and Pytest.
 
 ---
 
 ## 📁 Project Structure
 
-- `train.py`: Main training loop (loss, validation, accuracy, early stopping, saving).
-- `trainer.py`: Functions for training, validation, and evaluation.
-- `model.py`: CNN model definition.
-- `utils.py`: Dataset class and data loader utilities.
-- `export.py`: Exports trained model to TorchScript and ONNX formats.
-- `webcam_demo.py`: Real-time webcam-based inference demo.
+- `src/training/train.py`: Main training loop (loss, validation, accuracy, early stopping, saving).
+- `src/training/trainer.py`: Functions for training, validation, and evaluation.
+- `src/models/model_architecture.py`: CNN model definition.
+- `src/utils/utils.py`: Dataset class and data loader utilities.
+- `src/models/export.py`: Exports trained model to TorchScript and ONNX formats.
+- `src/demo/webcam_demo.py`: Real-time webcam-based inference demo.
 - `trained_models/`: Saved PyTorch models.
-- `runs/`: TensorBoard logs.
-- `README.md`: Project documentation.
 
 ---
 
@@ -38,6 +40,7 @@ The dataset is a CSV version of sign language images modeled after MNIST obtaine
 - CSV format: `label, pixel1, pixel2, ..., pixel784`.
 
 Download:
+
 - `sign_mnist_train.csv`
 - `sign_mnist_test.csv`
 
@@ -45,28 +48,28 @@ Download:
 
 ## ⚙️ Setup Instructions
 
-1. **Clone the repo**:
-   - `git clone https://github.com/yourusername/MNIST_sign.git && cd MNIST_sign`
-
-2. **Create a Python environment**:
-   - `conda create -n signlang python=3.10 -y && conda activate signlang`
-
-3. **Install dependencies**:
-   - `pip install -r requirements.txt`
+```bash
+git clone https://github.com/atharvavaidya14/MNIST_sign_language.git && cd MNIST_sign_language
+conda create -n signlang python=3.10 -y && conda activate signlang
+pip install -r requirements.txt
+```
 
 ---
 
-## 🏋️ Training
+## 🏋️ Model Training
 
 Run the training script. Example:
+
 ```bash
 python train.py --use_wandb --batch_size 128 --epochs 20
 ```
+
 - Performs training with validation split.
 - Saves best model (`trained_models/sign_cnn_best.pth`).
 - Logs losses/accuracy to TensorBoard.
 
 Launch TensorBoard:
+
 ```bash
 tensorboard --logdir=runs
 ```
@@ -78,9 +81,11 @@ Open the provided URL in your browser to view training stats.
 ## 📦 Export Models
 
 To export the best trained model to TorchScript and ONNX:
+
 ```bash
 python export.py
 ```
+
 - TorchScript saved as: `sign_model_scripted.pt`
 - ONNX saved as: `sign_model.onnx`
 
@@ -91,22 +96,14 @@ These models are optimized for Android or cross-platform deployment.
 ## 🎥 Webcam Demo
 
 To try real-time prediction using your webcam:
+
 ```bash
 python webcam_demo.py
 ```
+
 - Model must be trained or loaded beforehand.
 - The window shows predicted ASL class for the current frame.
 - Press `q` to exit.
-
----
-
-## 📱 Android Integration (Next Step)
-
-You can deploy the `sign_model_scripted.pt` or `sign_model.onnx` model to Android using:
-- PyTorch Mobile
-- ONNX Runtime for Android
-
-Integrate the exported model into an Android app using the appropriate runtime library.
 
 ---
 
@@ -122,34 +119,66 @@ Run the Flask app locally:
 python flask_app.py
 ```
 
-- Accepts image uploads via POST.
+- Accepts image uploads via POST requests.
 - Returns predicted ASL character.
-- Endpoint: http://localhost:5000/predict
+- Endpoint: <http://localhost:5000/predict>
 
 Example request (using curl):
 
-```bash 
+```bash
 curl -X POST -F image=@sample.png http://localhost:5000/predict
 ```
 
-### ⚡ Flask Inference API
+### ▶️ FastAPI (Recommended)
 
-```bash 
-uvicorn app.main:app --reload
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-## 🐳 Docker Support
+- `POST /predict`: Accepts image file, returns predicted letter.
 
-Run the entire app (model + API) in a Docker container.
+---
 
-### 🏗️ Build the image
+## 🐳 Docker Deployment
 
-```bash 
-docker build -t signlang-api .
+### 🏗️ Build
+
+```bash
+docker build -t atharvavaidya14/sign-lang-app:latest .
 ```
 
-### 🚀 Run the container
+### 🏃 Run
 
-```bash 
-docker run -p 8000:8000 signlang-api
+```bash
+docker run -p 8000:8000 atharvavaidya14/sign-lang-app:latest
 ```
+
+---
+
+## 🔁 CI/CD Pipeline
+
+### 🚲 CI (GitHub Actions)
+
+- Checks for code formatting (Black), linting (Flake8), and unit tests (Pytest).
+- Builds Docker image on push or PR to `deploy` branch.
+- Pushes image to DockerHub.
+
+### ✈️ CD (Render)
+
+- Uses DockerHub image.
+- Automatically deploys updated image.
+
+### 🔗 URL
+
+<https://sign-lang-app.onrender.com>
+
+⚠️ Ensure `POST /predict` is used instead of GET.
+
+---
+
+## ✅ Future Improvements
+
+- Android app integration.
+- Add frontend web interface.
+- Multi-language sign support.
+- Advanced sign language translator (more than alphabets and with video support)

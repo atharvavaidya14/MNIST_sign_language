@@ -5,6 +5,8 @@ on:
     branches:
       - deploy
   pull_request:
+    branches:
+      - deploy
 
 jobs:
   build-and-push:
@@ -21,7 +23,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PAT }}
 
       - name: Build Docker image
-        run: docker build -f docker/Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/sign-lang-api:latest .
+        run: docker build -f docker/Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/sign-lang-app:latest .
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/sign-lang-app:latest
